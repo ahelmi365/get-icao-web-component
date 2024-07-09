@@ -6,7 +6,8 @@ import {
   FaceFeature,
 } from "./ICAOWorker.js";
 
-import "./index.js";
+// import "./index.js";
+
 const icaoCheckerElement = document.querySelector("icao-checker-wc");
 // set the backendURL
 export let webCamScriptDomainName = "http://localhost:9002";
@@ -32,10 +33,6 @@ if (icaoStatusInstructions) {
   icaoStatusInstructions.style.display = "none";
 }
 
-// backendURL ? (webCamScriptDomainName = backendURL) : null;
-// console.log("backendURL", backendURL);
-// console.log("webCamScriptDomainName",webCamScriptDomainName);
-
 export const EnrolmentDevices = {
   WebCam: {
     Scripts: [
@@ -55,6 +52,7 @@ const leftAndRightFeatures = [
   ...rightFeatures.children,
 ];
 if (!isICAO) {
+  console.log({ isICAO });
   leftFeatures.style.display = "none";
   rightFeatures.style.display = "none";
 }
@@ -1022,31 +1020,6 @@ export let lableMessageForICAO;
 export const setLableMessageForICAO = (newMEssage) => {
   lableMessageForICAO = newMEssage;
 };
-
-// useEffect to GetConnectionState
-// useEffect(() => {
-//   if (isICAO) {
-//     RetrieveScripts(EnrolmentDevices.WebCam.Scripts);
-//   }
-
-//   const selecetedCameraIDFromLocalStorage = getSelectedCameraFromLocalStorage();
-//   setCachedCamera(selecetedCameraIDFromLocalStorage);
-//   enumerateDevices(selecetedCameraIDFromLocalStorage);
-
-//   if (isCheckingICAOServiceThread && isICAO) {
-//     CheckingICAOServiceThread.current = setInterval(() => {
-//       GetConnectionState().then((ConnectionState) => {
-//         setLableMessageForICAO(ConnectionState);
-//         const lblMessageError = document.getElementById("lblMessageForICAO");
-//         lblMessageError ? (lblMessageError.innerText = ConnectionState) : null;
-
-//         // $("#lblMessageForICAO")?.text(ConnectionState);
-//       });
-//     }, 1000);
-//   } else {
-//     ClearICAOServiceThread();
-//   }
-// }, []);
 
 // function to store the selected camera in local storage:
 export const addSelectedCameraToLocalStorage = (selecetedCameraID) => {
