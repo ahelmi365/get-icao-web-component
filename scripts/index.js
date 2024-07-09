@@ -1,4 +1,10 @@
 import { StopWorker } from "./ICAOWorker.js";
+import {
+  loadScript,
+  loadStyle,
+  removeScript,
+  removeStyleSheet,
+} from "./common.js";
 class ICaoChecker extends HTMLElement {
   // static get properties() {
   //   return {
@@ -9,97 +15,59 @@ class ICaoChecker extends HTMLElement {
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
+    // this.attachShadow({ mode: "open" });
     this.rating = 0;
     this.vote = null;
 
+    // this.loadBootstrap();
+  }
+
+  connectedCallback() {
+    this.loadBootstrap();
+    console.log("connectedCallback()");
+    const shadowRoot = this.attachShadow({ mode: "open" });
     // Create button to open modal
-    const button = document.createElement("button");
-    button.textContent = "Open Modal";
-    button.className = "btn btn-primary";
-    button.addEventListener(
+
+    const openMOdalBtn = document.getElementById("open-icao-modal");
+    openMOdalBtn.addEventListener(
       "click",
       this.openModalAndoadIcaoScripts.bind(this)
     );
     // Append button to the shadow DOM
-    this.shadowRoot.appendChild(button);
 
-    this.loadBootstrap();
+    // shadowRoot.appendChild(button);
   }
-
-  connectedCallback() {}
-  disconnectedCallback() {}
+  disconnectedCallback() {
+    console.log("disconnectedCallback");
+  }
 
   openModalAndoadIcaoScripts() {
     this.openModal(this);
-    // this.loadScript("./scripts/script.js");
-    this.loadStyle("./styles/styles.css");
+    // loadScript("./scripts/script.js");
+    loadStyle("./styles/styles.css");
   }
   loadBootstrap() {
     // Load necessary scripts and styles
-    this.loadScript("https://code.jquery.com/jquery-3.5.1.min.js")
+    loadScript("https://code.jquery.com/jquery-3.5.1.min.js")
       .then(() =>
-        this.loadScript(
+        loadScript(
           "https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         )
       )
       .then(() =>
-        this.loadScript(
+        loadScript(
           // "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
           "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         )
       )
       .then(() =>
-        this.loadStyle(
+        loadStyle(
           // "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         )
       )
-      .then(() => console.log("Loaded Succesfully"))
+      .then()
       .catch((err) => console.error("Error loading scripts or styles", err));
-  }
-
-  willUpdate(changedProps) {
-    if (changedProps.has("vote")) {
-      const newValue = this.vote;
-      const oldValue = changedProps.get("vote");
-
-      if (newValue === "up") {
-        if (oldValue === "down") {
-          this.rating += 2;
-        } else {
-          this.rating += 1;
-        }
-      } else if (newValue === "down") {
-        if (oldValue === "up") {
-          this.rating -= 2;
-        } else {
-          this.rating -= 1;
-        }
-      }
-    }
-  }
-
-  loadScript(src) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.type = "module";
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error(`Failed to load script ${src}`));
-      document.head.appendChild(script);
-    });
-  }
-
-  loadStyle(href) {
-    return new Promise((resolve, reject) => {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = href;
-      link.onload = () => resolve();
-      link.onerror = () => reject(new Error(`Failed to load style ${href}`));
-      document.head.appendChild(link);
-    });
   }
 
   initializeBootstrap() {
@@ -131,7 +99,7 @@ class ICaoChecker extends HTMLElement {
         role="dialog" 
         aria-labelledby="exampleModalLabel" 
         aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                 
                     <div class="modal-body">
@@ -683,16 +651,16 @@ class ICaoChecker extends HTMLElement {
 
     // Append modal to the regular DOM
     document.body.appendChild(modal);
-    // load icao scripts()
-    this.loadScript("./scripts/script.js");
+    console.log("Adding script...........");
 
     // Initialize the modal with Bootstrap's jQuery method
     $(modal).find(".modal").modal("show");
-
+    // load icao scripts()
+    loadScript("./scripts/script.js");
     // on show modal
     $(modal)
       .find(".modal")
-      .on("shown.bs.modal", function () {
+      .on("shown.bs.modal", () => {
         console.log("Hi shown.bs.modal from index.js");
         const tooltipTriggerList = document.querySelectorAll(
           '[data-bs-toggle="tooltip"]'
@@ -705,7 +673,7 @@ class ICaoChecker extends HTMLElement {
     // on hide moda Remove modal from DOM when hidden to clean up
     $(modal)
       .find(".modal")
-      .on("hidden.bs.modal", async function () {
+      .on("hidden.bs.modal", async () => {
         const {
           setIsCheckingICAOServiceThread,
           reestCashedArray,
@@ -719,12 +687,13 @@ class ICaoChecker extends HTMLElement {
 
         const openFullScreenBtn = document.getElementById("open-full-screen");
         const closeFullScreenBtn = document.getElementById("close-full-screen");
-        console.log({ closeFullScreenBtn });
         if (document.fullscreenElement) {
           document.exitFullscreen();
           closeFullScreenBtn.style.display = "none";
           openFullScreenBtn.style.display = "block";
         }
+        removeScript("./scripts/script.js");
+        removeStyleSheet("./styles/styles.css");
 
         modal.remove();
         console.log("modal closed");

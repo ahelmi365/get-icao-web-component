@@ -1,5 +1,9 @@
 console.log("Hi from scripts");
+
 // #region Imports
+
+import { removeScript, removeStyleSheet } from "./common.js";
+
 import {
   CaptureImage,
   ClearICAOServiceThread,
@@ -169,6 +173,9 @@ modalCloseBtn.addEventListener("click", () => {
   StopCameraIndicatorInBrowser();
   StopCheckingICAOServiceThread();
   document.getElementById("icao-modal-start-container").remove();
+  removeScript("./scripts/script.js");
+  removeStyleSheet("./styles/styles.css");
+
   clearInterval(FaceDetectedRectangleDrawingThread);
 });
 

@@ -5,13 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body class="container">
+  <body class="container mt-4">
+    <button
+      class="btn btn-primary"
+      id="open-icao-modal"
+      name="icao-modal"
+      type="button"
+    >
+      Open ICAO Modal
+    </button>
     <icao-checker-wc rating="6">
       <div>This is the light DOM!</div>
     </icao-checker-wc>
 
     <div class="result-image card mt-4 p-4" style="height: 315px">
-      <img id="result-image" src="" alt="" width="300px" />
+      <img id="icao-result-image" src="" alt="" width="300px" />
     </div>
 
     <script src="./scripts/index.js" type="module"></script>

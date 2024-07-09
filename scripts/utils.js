@@ -8,8 +8,6 @@ import {
 
 import "./index.js";
 const icaoCheckerElement = document.querySelector("icao-checker-wc");
-console.log({ icaoCheckerElement });
-console.log(icaoCheckerElement.shadowRoot);
 // set the backendURL
 export let webCamScriptDomainName = "http://localhost:9002";
 export let backendURL = "http://localhost:9002";
@@ -30,7 +28,6 @@ export const IcaoAttributesValues = {
 const icaoStatusInstructions = document.getElementById(
   "icao-status-instructions"
 );
-console.log({ icaoStatusInstructions });
 if (icaoStatusInstructions) {
   icaoStatusInstructions.style.display = "none";
 }
@@ -53,7 +50,6 @@ export const EnrolmentDevices = {
 // const leftFeatures = document.getElementById("left-features");
 const leftFeatures = document.getElementById("left-features");
 const rightFeatures = document.getElementById("right-features");
-console.log({ leftFeatures });
 const leftAndRightFeatures = [
   ...leftFeatures.children,
   ...rightFeatures.children,
@@ -118,7 +114,6 @@ export let CheckingICAOServiceThread;
 // const [isCheckingICAOServiceThread, setIsCheckingICAOServiceThread] = useState(true);
 export let isCheckingICAOServiceThread = true;
 export const setIsCheckingICAOServiceThread = (value) => {
-  console.log({ isCheckingICAOServiceThread });
   isCheckingICAOServiceThread = value;
 };
 
@@ -777,7 +772,7 @@ export async function CaptureImage() {
   }
 }
 
-const resultImage = document.getElementById("result-image");
+const resultImage = document.getElementById("icao-result-image");
 
 const updatePhotoImage = (src) => {
   resultImage.src = src;
