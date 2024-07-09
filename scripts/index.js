@@ -652,7 +652,14 @@ class ICaoChecker extends HTMLElement {
     // Append modal to the regular DOM
     document.body.appendChild(modal);
     console.log("Adding script...........");
-
+    // Remove existing script element if it exists
+    const existingScript = document.querySelector(
+      'script[src="./scripts/script.js"]'
+    );
+    if (existingScript) {
+      console.log("exist");
+      existingScript.remove();
+    }
     // Initialize the modal with Bootstrap's jQuery method
     $(modal).find(".modal").modal("show");
     // load icao scripts()
@@ -660,8 +667,10 @@ class ICaoChecker extends HTMLElement {
     // on show modal
     $(modal)
       .find(".modal")
-      .on("shown.bs.modal", () => {
+      .on("shown.bs.modal", async function () {
         console.log("Hi shown.bs.modal from index.js");
+        const { onICAOScriptLoad } = await import("./script.js");
+        onICAOScriptLoad();
         const tooltipTriggerList = document.querySelectorAll(
           '[data-bs-toggle="tooltip"]'
         );
