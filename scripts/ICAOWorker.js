@@ -54,7 +54,7 @@ function run(fn) {
 }
 
 export function StopWorker() {
-  //console.log("In StopWorker");
+  console.log("In StopWorker");
   isWorkerStopped = true;
   isIcaoCheckRunning = false;
   if (worker != null) {

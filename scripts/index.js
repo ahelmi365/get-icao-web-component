@@ -1,3 +1,4 @@
+import { StopWorker } from "./ICAOWorker.js";
 class ICaoChecker extends HTMLElement {
   // static get properties() {
   //   return {
@@ -26,9 +27,12 @@ class ICaoChecker extends HTMLElement {
     this.loadBootstrap();
   }
 
+  connectedCallback() {}
+  disconnectedCallback() {}
+
   openModalAndoadIcaoScripts() {
     this.openModal(this);
-    this.loadScript("./scripts/script.js");
+    // this.loadScript("./scripts/script.js");
     this.loadStyle("./styles/styles.css");
   }
   loadBootstrap() {
@@ -41,12 +45,14 @@ class ICaoChecker extends HTMLElement {
       )
       .then(() =>
         this.loadScript(
-          "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+          // "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+          "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         )
       )
       .then(() =>
         this.loadStyle(
-          "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          // "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         )
       )
       .then(() => console.log("Loaded Succesfully"))
@@ -116,6 +122,7 @@ class ICaoChecker extends HTMLElement {
   async openModal() {
     // Create modal structure
     const modal = document.createElement("div");
+    modal.id = "icao-modal-start-container";
     modal.innerHTML = `
         <div 
         class="modal fade icao-modal-container p-0 m-0"
@@ -145,6 +152,7 @@ class ICaoChecker extends HTMLElement {
                         id="top-row-close-icon"
                         data-bs-dismiss="modal"
                         aria-label="Close"
+                        data-dismiss="modal"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -334,7 +342,7 @@ class ICaoChecker extends HTMLElement {
                           <!-- middle-column -->
                           <div
                             id="icao-status-instructions"
-                            class="middle-column flex-column-space-around-center"
+                            class="middle-column flex-column-space-around-center p-4"
                           >
                             <div
                               class="icao-reconnect-container flex-column-space-around-center"
@@ -675,6 +683,8 @@ class ICaoChecker extends HTMLElement {
 
     // Append modal to the regular DOM
     document.body.appendChild(modal);
+    // load icao scripts()
+    this.loadScript("./scripts/script.js");
 
     // Initialize the modal with Bootstrap's jQuery method
     $(modal).find(".modal").modal("show");
@@ -695,8 +705,29 @@ class ICaoChecker extends HTMLElement {
     // on hide moda Remove modal from DOM when hidden to clean up
     $(modal)
       .find(".modal")
-      .on("hidden.bs.modal", function () {
+      .on("hidden.bs.modal", async function () {
+        const {
+          setIsCheckingICAOServiceThread,
+          reestCashedArray,
+          stopVideoStream,
+        } = await import("./utils.js");
+        setIsCheckingICAOServiceThread(false);
+        StopWorker();
+        reestCashedArray();
+        stopVideoStream();
+        window.stream = null;
+
+        const openFullScreenBtn = document.getElementById("open-full-screen");
+        const closeFullScreenBtn = document.getElementById("close-full-screen");
+        console.log({ closeFullScreenBtn });
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+          closeFullScreenBtn.style.display = "none";
+          openFullScreenBtn.style.display = "block";
+        }
+
         modal.remove();
+        console.log("modal closed");
       });
   }
 

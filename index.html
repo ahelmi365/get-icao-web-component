@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body>
+  <body class="container">
     <icao-checker-wc rating="6">
       <div>This is the light DOM!</div>
     </icao-checker-wc>
 
-    <script src="./scripts/index.js"></script>
+    <div class="result-image card mt-4 p-4" style="height: 315px">
+      <img id="result-image" src="" alt="" width="300px" />
+    </div>
+
+    <script src="./scripts/index.js" type="module"></script>
   </body>
 </html>

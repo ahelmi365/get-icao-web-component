@@ -27,7 +27,7 @@ export const IcaoAttributesValues = {
   IN_COMPATIBLE: "Incompatible",
   DEFAULT: "No-Status",
 };
-const icaoStatusInstructions = icaoCheckerElement.shadowRoot.getElementById(
+const icaoStatusInstructions = document.getElementById(
   "icao-status-instructions"
 );
 console.log({ icaoStatusInstructions });
@@ -50,10 +50,10 @@ export const EnrolmentDevices = {
   },
 };
 
-const leftFeatures =
-  icaoCheckerElement.shadowRoot.getElementById("left-features");
-const rightFeatures =
-  icaoCheckerElement.shadowRoot.getElementById("right-features");
+// const leftFeatures = document.getElementById("left-features");
+const leftFeatures = document.getElementById("left-features");
+const rightFeatures = document.getElementById("right-features");
+console.log({ leftFeatures });
 const leftAndRightFeatures = [
   ...leftFeatures.children,
   ...rightFeatures.children,
@@ -62,20 +62,18 @@ if (!isICAO) {
   leftFeatures.style.display = "none";
   rightFeatures.style.display = "none";
 }
-const connectCameraBtnContainer = icaoCheckerElement.shadowRoot.getElementById(
+const connectCameraBtnContainer = document.getElementById(
   "connect-camera-btn-container"
 );
-const captureImageBtnContainer = icaoCheckerElement.shadowRoot.getElementById(
+const captureImageBtnContainer = document.getElementById(
   "capture-image-btn-container"
 );
-const saveCroppedImageContainer = icaoCheckerElement.shadowRoot.getElementById(
+const saveCroppedImageContainer = document.getElementById(
   "save-captured-image-btn-container"
 );
 saveCroppedImageContainer.style.display = "none";
-const connectCameraBtn =
-  icaoCheckerElement.shadowRoot.getElementById("connect-camera-btn");
-const captureImageBtn =
-  icaoCheckerElement.shadowRoot.getElementById("capture-image-btn");
+const connectCameraBtn = document.getElementById("connect-camera-btn");
+const captureImageBtn = document.getElementById("capture-image-btn");
 
 // console.log(EnrolmentDevices.WebCam.Scripts);
 
@@ -162,7 +160,7 @@ export function enumerateDevices(cachedConnectedCamera) {
           });
           setAvailableCameras(avCameras);
           const cbAvaliableCameras =
-            icaoCheckerElement.shadowRoot.getElementById("cbAvaliableCameras");
+            document.getElementById("cbAvaliableCameras");
 
           Object.keys(avCameras).map((item, index) => {
             const cameraLabel = avCameras[item];
@@ -281,16 +279,15 @@ export function ConnectCamera(camera) {
     }
     pausedRequested = false;
     StartVideo();
-    // icaoCheckerElement.shadowRoot.getElementById("btnSaveCaptureImage").disabled = true;
+    // document.getElementById("btnSaveCaptureImage").disabled = true;
     if (isICAO) {
       StartWorker();
     }
     setIsDeviceConnected(true);
 
-    // icaoCheckerElement.shadowRoot.getElementById("canvas").style.display = "inline"; // commented by Ali
+    // document.getElementById("canvas").style.display = "inline"; // commented by Ali
     // const cameraCopy = JSON.parse(JSON.stringify(camera));
-    icaoCheckerElement.shadowRoot.getElementById("cropped").style.display =
-      "none";
+    document.getElementById("cropped").style.display = "none";
     // addDataIntoCache(
     //   "ConnectedCamera",
     //   window.location.protocol + "//" + window.location.host,
@@ -318,17 +315,17 @@ let preferredResolutions = [
 export async function StartVideo() {
   // console.log("Started the video"); // by Ali
 
-  const video = icaoCheckerElement.shadowRoot.getElementById("video");
+  const video = document.getElementById("video");
   // method load() resets the media element to its initial state
   // and begins the process of selecting a media source and loading the media in preparation for playback
   // to begin at the beginning.
   video.load();
 
-  const canvas = icaoCheckerElement.shadowRoot.getElementById("canvas");
+  const canvas = document.getElementById("canvas");
   canvas.width = resolutionWidth;
   canvas.height = resolutionHeight; //video.videoHeight;//"400";//
 
-  // icaoCheckerElement.shadowRoot.getElementById("video").style.display = "inline"; // by ali
+  // document.getElementById("video").style.display = "inline"; // by ali
   video.style.display = "inline"; // by ali
 
   // if ((<any>window).stream) {
@@ -414,7 +411,7 @@ export async function StartVideo() {
 // a function to stop video streaming from user's camera
 export function stopVideoStream() {
   console.log("stopVideoStream() is called");
-  const videoElement = icaoCheckerElement.shadowRoot.getElementById("video");
+  const videoElement = document.getElementById("video");
   const stream = videoElement.srcObject;
   const tracks = stream?.getTracks();
   if (!tracks) {
@@ -429,8 +426,8 @@ export function stopVideoStream() {
 
 // grapFrame
 export function grapFrame() {
-  const video = icaoCheckerElement.shadowRoot.getElementById("video");
-  const canvas = icaoCheckerElement.shadowRoot.getElementById("canvas");
+  const video = document.getElementById("video");
+  const canvas = document.getElementById("canvas");
   if (video) {
     // by Ali
     // canvas.width = video.videoWidth;
@@ -633,7 +630,7 @@ const updateTooltipText = (toolTipId, faceFeaturesStatus, index, icaoItem) => {
 export function DisplayICAOCheckingMessage(message) {
   // console.log("DisplayICAOCheckingMessage", message);
   // console.log("typeof message",  message.length);
-  const divICAOCheckingMessage = icaoCheckerElement.shadowRoot.getElementById(
+  const divICAOCheckingMessage = document.getElementById(
     "divICAOCheckingMessage"
   );
   if (divICAOCheckingMessage) {
@@ -693,14 +690,14 @@ export async function CaptureImage() {
 
   pausedRequested = true;
   StopWorker();
-  const video = icaoCheckerElement.shadowRoot.getElementById("video");
+  const video = document.getElementById("video");
   video.pause();
 
-  const canvas = icaoCheckerElement.shadowRoot.getElementById("canvas");
+  const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
   ctx.drawImage(video, 0, 0, resolutionWidth, resolutionHeight);
 
-  const croppedimg = icaoCheckerElement.shadowRoot.getElementById("cropped");
+  const croppedimg = document.getElementById("cropped");
   if (isICAO) {
     const GetCropImageResult = await window
       .GetWebCameProvider()
@@ -730,9 +727,9 @@ export async function CaptureImage() {
           500
         );
 
-        // icaoCheckerElement.shadowRoot.getElementById("canvas").style.display = "none";
-        // icaoCheckerElement.shadowRoot.getElementById("video").style.display = "none"; // by ali
-        // icaoCheckerElement.shadowRoot.getElementById("cropped").style.display = "block"; // from inline to block by ali
+        // document.getElementById("canvas").style.display = "none";
+        // document.getElementById("video").style.display = "none"; // by ali
+        // document.getElementById("cropped").style.display = "block"; // from inline to block by ali
         icaoStatusInstructions.style.display = "none";
         connectCameraBtn.disabled = false;
         captureImageBtn.disabled = false;
@@ -744,7 +741,7 @@ export async function CaptureImage() {
       };
       croppedimg.src = GetCropImageResult;
 
-      // var btnSaveCaptureImage = icaoCheckerElement.shadowRoot.getElementById("btnSaveCaptureImage");
+      // var btnSaveCaptureImage = document.getElementById("btnSaveCaptureImage");
       // btnSaveCaptureImage.disabled = false;
 
       // stopWindowStreaming(); // by Ali
@@ -780,8 +777,7 @@ export async function CaptureImage() {
   }
 }
 
-const resultImage =
-  icaoCheckerElement.shadowRoot.getElementById("result-image");
+const resultImage = document.getElementById("result-image");
 
 const updatePhotoImage = (src) => {
   resultImage.src = src;
@@ -790,7 +786,7 @@ const updatePhotoImage = (src) => {
 export function SaveCaptureedImg() {
   StopCameraIndicatorInBrowser();
   ClearICAOServiceThread();
-  const croppedImage = icaoCheckerElement.shadowRoot.getElementById("cropped");
+  const croppedImage = document.getElementById("cropped");
   updatePhotoImage(croppedImage.src);
   stopVideoStream();
   croppedImage.style.display = "none";
@@ -863,8 +859,7 @@ export async function GetConnectionState() {
 }
 
 export const connectwithCameraFromLocalStorage = () => {
-  const avaliableCamerasSelect =
-    icaoCheckerElement.shadowRoot.getElementById("cbAvaliableCameras");
+  const avaliableCamerasSelect = document.getElementById("cbAvaliableCameras");
   const selecetedCameraIDFromLocalStorage = getSelectedCameraFromLocalStorage();
 
   avaliableCamerasSelect.value = selecetedCameraIDFromLocalStorage;
@@ -964,9 +959,7 @@ export function handleKeyDown(e) {
 }
 
 // function to toggle the fullscreen mode
-export const icaoContainer = icaoCheckerElement.shadowRoot.querySelector(
-  ".icao-container-modal"
-);
+export const icaoContainer = document.querySelector(".icao-container-modal");
 export function toggleFullScreen() {
   if (!document.fullscreenElement) {
     icaoContainer
@@ -998,9 +991,7 @@ export function toggleFullScreen() {
 // function to add the fullscreen styles
 export function addFullscreenStyles() {
   // console.log("addFullscreenStyles()");
-  const iconSvgContainer = icaoCheckerElement.shadowRoot.querySelectorAll(
-    ".icon-svg-container"
-  );
+  const iconSvgContainer = document.querySelectorAll(".icon-svg-container");
   iconSvgContainer.forEach((icon) => {
     icon.classList.add("icon-svg-container-fullscreen");
   });
@@ -1009,9 +1000,8 @@ export function addFullscreenStyles() {
 
 export function setDataContainerSize() {
   // console.log("setDataContainerSize()");
-  // const videoElement = icaoCheckerElement.shadowRoot.getElementById("video");
-  const dataContainer =
-    icaoCheckerElement.shadowRoot.querySelector(".data-conatiner");
+  // const videoElement = document.getElementById("video");
+  const dataContainer = document.querySelector(".data-conatiner");
   dataContainer.classList.toggle("data-conatiner-fullscreen");
 
   // const videoWidth = videoElement.clientWidth;
@@ -1023,9 +1013,7 @@ export function setDataContainerSize() {
 // function to remove the fullscreen styles
 export function removeFullscreenStyles() {
   // console.log("removeFullscreenStyles()");
-  const iconSvgContainer = icaoCheckerElement.shadowRoot.querySelectorAll(
-    ".icon-svg-container"
-  );
+  const iconSvgContainer = document.querySelectorAll(".icon-svg-container");
   iconSvgContainer.forEach((icon) => {
     icon.classList.remove("icon-svg-container-fullscreen");
   });
@@ -1054,7 +1042,7 @@ export const setLableMessageForICAO = (newMEssage) => {
 //     CheckingICAOServiceThread.current = setInterval(() => {
 //       GetConnectionState().then((ConnectionState) => {
 //         setLableMessageForICAO(ConnectionState);
-//         const lblMessageError = icaoCheckerElement.shadowRoot.getElementById("lblMessageForICAO");
+//         const lblMessageError = document.getElementById("lblMessageForICAO");
 //         lblMessageError ? (lblMessageError.innerText = ConnectionState) : null;
 
 //         // $("#lblMessageForICAO")?.text(ConnectionState);
