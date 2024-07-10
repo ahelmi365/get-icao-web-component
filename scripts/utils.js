@@ -1,4 +1,5 @@
-console.log("hii from utils");
+console.log("--------- Start OF UTILS -------------");
+
 import {
   StartWorker,
   StopWorker,
@@ -7,18 +8,18 @@ import {
 } from "./ICAOWorker.js";
 
 // import "./index.js";
-
+const utilsCommonVars = {
+  isICAO: true,
+  isPhotoCaptured: false,
+  isDeviceAvailable: true,
+};
 const icaoCheckerElement = document.querySelector("icao-checker-wc");
 // set the backendURL
-export let webCamScriptDomainName = "http://localhost:9002";
-export let backendURL = "http://localhost:9002";
-export let isICAO = false;
-export const setIsICAO = (value) => {
-  console.log({ isICAO });
-  isICAO = value;
-};
+const webCamScriptDomainName = "http://localhost:9002";
+const backendURL = "http://localhost:9002";
+export var isICAO = true;
 
-export const IcaoAttributesValues = {
+const IcaoAttributesValues = {
   TOO_LOW: "TooLow",
   TOO_HIGH: "TooHigh",
   IN_RANGE: "InRange",
@@ -71,32 +72,25 @@ const captureImageBtn = document.getElementById("capture-image-btn");
 
 // console.log(EnrolmentDevices.WebCam.Scripts);
 
-// set the dafault icao-data
-// const [ICAODATA, setICAODATA] = useState(icaoData);
-export var ICAODATA;
-const setICAODATA = (FaceFeatures) => {
-  ICAODATA = FaceFeatures;
-};
-
 // const [isLiveIcaoData, setIsLiveIcaoData] = useState(false);
-export let isLiveIcaoData = true;
-export const setIsLiveIcaoData = (value) => {
+let isLiveIcaoData = true;
+const setIsLiveIcaoData = (value) => {
   isLiveIcaoData = value;
 };
 
 //#region Properties
 // const [avaliableCameras, setAvailableCameras] = useState({});
-export let avaliableCameras = [];
+const avaliableCameras = [];
 const setAvailableCameras = (newCamera) => {
   //   avaliableCameras.push(newCamera);
 };
 
-export let pausedRequested = false;
+let pausedRequested = false;
 export let webCamDevice = null;
-export let serviceProxyForWebCam;
+let serviceProxyForWebCam;
 
 // const [loading, setLoading] = useState(false);
-export let loading;
+let loading;
 const setLoading = () => {};
 // const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
 export let isPhotoCaptured = false;
@@ -108,9 +102,9 @@ const setIsDeviceAvailable = () => {};
 export let isDeviceConnected;
 const setIsDeviceConnected = () => {};
 // const CheckingICAOServiceThread = useRef();
-export let CheckingICAOServiceThread;
+var CheckingICAOServiceThread = null;
 // const [isCheckingICAOServiceThread, setIsCheckingICAOServiceThread] = useState(true);
-export let isCheckingICAOServiceThread = true;
+export var isCheckingICAOServiceThread = true;
 export const setIsCheckingICAOServiceThread = (value) => {
   isCheckingICAOServiceThread = value;
 };
@@ -502,8 +496,6 @@ export function HandleSuccessInICAOChecking(IcaoResult) {
   }
 
   setICAODATA(FaceFeatures); // by Ali
-  ICAODATA = FaceFeatures;
-  //   console.log(ICAODATA);
 
   //   ------------------ handle icao data
 
@@ -952,8 +944,9 @@ export function handleKeyDown(e) {
 }
 
 // function to toggle the fullscreen mode
-export const icaoContainer = document.querySelector(".icao-container-modal");
 export function toggleFullScreen() {
+  const icaoContainer = document.querySelector(".icao-container-modal");
+  console.log({ icaoContainer });
   if (!document.fullscreenElement) {
     icaoContainer
       .requestFullscreen()
@@ -1037,3 +1030,7 @@ export const getSelectedCameraFromLocalStorage = () => {
     return "-1";
   }
 };
+
+console.log("--------- END OF UTILS -------------");
+
+export let utils = { CheckingICAOServiceThread };

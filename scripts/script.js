@@ -31,7 +31,7 @@ import {
   stopVideoStream,
   toggleFullScreen,
 } from "./utils.js";
-import "./utils.js";
+// import "./utils.js";
 // Function to dynamically import the module
 
 // #endregion
@@ -57,7 +57,6 @@ const tooltipList = [...tooltipTriggerList].map(
 // #endregion
 // #region UseEffects
 // ---------------- apply effects ----------------------
-
 export const onICAOScriptLoad = async () => {
   const {
     CaptureImage,
@@ -85,7 +84,9 @@ export const onICAOScriptLoad = async () => {
     setLableMessageForICAO,
     stopVideoStream,
     toggleFullScreen,
+    utils,
   } = await import("./utils.js");
+
   console.log({ isICAO });
 
   reestCashedArray();
@@ -103,13 +104,15 @@ export const onICAOScriptLoad = async () => {
   const selecetedCameraIDFromLocalStorage = getSelectedCameraFromLocalStorage();
   setCachedCamera(selecetedCameraIDFromLocalStorage);
   enumerateDevices(selecetedCameraIDFromLocalStorage);
-  let CheckingICAOServiceThread;
-  if (isCheckingICAOServiceThread && isICAO) {
-    console.log({ isICAO });
-    console.log({ isCheckingICAOServiceThread });
 
-    CheckingICAOServiceThread = setInterval(() => {
+  console.log({ isICAO });
+  console.log({ isCheckingICAOServiceThread });
+  if (isCheckingICAOServiceThread && isICAO) {
+    console.log(utils.CheckingICAOServiceThread);
+    ClearICAOServiceThread(utils.CheckingICAOServiceThread);
+    utils.CheckingICAOServiceThread = setInterval(() => {
       if (isCheckingICAOServiceThread && isICAO) {
+        console.log(isCheckingICAOServiceThread && isICAO);
         GetConnectionState().then((ConnectionState) => {
           setLableMessageForICAO(ConnectionState);
           const lblMessageError = document.getElementById("lblMessageForICAO");
@@ -122,7 +125,7 @@ export const onICAOScriptLoad = async () => {
       }
     }, 1000);
   } else {
-    ClearICAOServiceThread(CheckingICAOServiceThread);
+    ClearICAOServiceThread(utils.CheckingICAOServiceThread);
   }
 
   // #endregion
@@ -211,7 +214,8 @@ export const onICAOScriptLoad = async () => {
     stopVideoStream();
     StopCameraIndicatorInBrowser();
     StopCheckingICAOServiceThread();
-    document.getElementById("icao-modal-start-container").remove();
+    document.getElementById("icao-modal-start-container").style.display =
+      "none";
     removeScript("./scripts/script.js");
     removeStyleSheet("./styles/styles.css");
 
