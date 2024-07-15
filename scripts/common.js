@@ -1,5 +1,7 @@
 export function removeScript(src) {
+  console.log({ src });
   const scriptToRemove = document.querySelector(`script[src="${src}"]`);
+  console.log({ scriptToRemove });
   if (scriptToRemove) {
     scriptToRemove.remove();
   }

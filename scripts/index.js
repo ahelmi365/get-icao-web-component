@@ -6,23 +6,20 @@ import {
   removeStyleSheet,
 } from "./common.js";
 class ICaoChecker extends HTMLElement {
-  // static get properties() {
-  //   return {
-  //     rating: { type: Number },
-  //     vote: { type: String, reflect: true },
-  //   };
-  // }
-
   constructor() {
     super();
     // this.attachShadow({ mode: "open" });
-    this.rating = 0;
-    this.vote = null;
-
-    // this.loadBootstrap();
+    this.isICAOWC = false;
   }
 
   connectedCallback() {
+    const hasisICAOWCAttr = this.getAttribute("isICAOWC");
+    console.log({ hasisICAOWCAttr });
+    if (hasisICAOWCAttr === null) {
+      this.isICAOWC = false;
+    } else {
+      this.isICAOWC = true;
+    }
     this.loadBootstrap();
     console.log("connectedCallback()");
     const shadowRoot = this.attachShadow({ mode: "open" });
@@ -41,6 +38,11 @@ class ICaoChecker extends HTMLElement {
     console.log("disconnectedCallback");
   }
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log(
+      `Attribute ${name} has changed from ${oldValue} to ${newValue}.`
+    );
+  }
   initICAOModal() {
     // Create modal structure
     const modal = document.createElement("div");
@@ -1232,14 +1234,14 @@ class ICaoChecker extends HTMLElement {
 
     const innerModal = modal.querySelector(".modal");
     if (innerModal) {
-      innerModal.addEventListener("shown.bs.modal", async function () {
+      innerModal.addEventListener("shown.bs.modal", async () => {
         // Your async function code here
         console.log(
           "Hiiiiiiiiiiiiii from inside shown modal -------------------"
         );
 
         const { onICAOScriptLoad } = await import("./script.js");
-        onICAOScriptLoad();
+        onICAOScriptLoad(this.isICAOWC);
       });
     }
     if (innerModal) {
@@ -1255,9 +1257,14 @@ class ICaoChecker extends HTMLElement {
           ClearICAOServiceThread,
           isCheckingICAOServiceThread,
           utils,
+          isICAO,
+          EnrolmentDevices,
+          utilsCommonVars,
         } = await import("./utils.js");
         const myUtils = (await import("./utils.js")).utils;
         console.log({ myUtils });
+        console.log({ isICAO });
+        console.log({ utilsCommonVars });
 
         setIsCheckingICAOServiceThread(false);
         StopWorker();
@@ -1267,6 +1274,11 @@ class ICaoChecker extends HTMLElement {
 
         window.stream = null;
 
+        removeScript("./scripts/script.js");
+        removeScript("./scripts/utils.js");
+        EnrolmentDevices.WebCam.Scripts.map((script) => {
+          removeScript(script);
+        });
         console.log({ isCheckingICAOServiceThread });
       });
     }
@@ -1274,8 +1286,8 @@ class ICaoChecker extends HTMLElement {
     if (innerModal) {
       const bootstrapModal = new bootstrap.Modal(innerModal);
       bootstrapModal.show();
-      const { onICAOScriptLoad } = await import("./script.js");
-      onICAOScriptLoad();
+      // const { onICAOScriptLoad } = await import("./script.js");
+      // onICAOScriptLoad();
     }
 
     // load icao scripts()

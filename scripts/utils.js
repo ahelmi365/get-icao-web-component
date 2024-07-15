@@ -8,7 +8,7 @@ import {
 } from "./ICAOWorker.js";
 
 // import "./index.js";
-const utilsCommonVars = {
+export const utilsCommonVars = {
   isICAO: true,
   isPhotoCaptured: false,
   isDeviceAvailable: true,
@@ -17,7 +17,7 @@ const icaoCheckerElement = document.querySelector("icao-checker-wc");
 // set the backendURL
 const webCamScriptDomainName = "http://localhost:9002";
 const backendURL = "http://localhost:9002";
-export var isICAO = true;
+export var isICAO = false;
 
 const IcaoAttributesValues = {
   TOO_LOW: "TooLow",
@@ -52,11 +52,11 @@ const leftAndRightFeatures = [
   ...leftFeatures.children,
   ...rightFeatures.children,
 ];
-if (!isICAO) {
-  console.log({ isICAO });
-  leftFeatures.style.display = "none";
-  rightFeatures.style.display = "none";
-}
+// if (!utilsCommonVars.isICAO) {
+//   console.log("utilsCommonVars.isICAO", utilsCommonVars.isICAO);
+//   leftFeatures.style.display = "none";
+//   rightFeatures.style.display = "none";
+// }
 const connectCameraBtnContainer = document.getElementById(
   "connect-camera-btn-container"
 );
@@ -123,6 +123,16 @@ const setSelectedCamera = () => {};
 export let videoRef;
 //#endregion
 
+export const onLoadUtils = () => {
+  console.log(utilsCommonVars);
+  if (!utilsCommonVars.isICAO) {
+    console.log("utilsCommonVars.isICAO", utilsCommonVars.isICAO);
+    leftFeatures.style.display = "none";
+    rightFeatures.style.display = "none";
+  }
+};
+
+// #region functions
 // enumerateDevices
 export function enumerateDevices(cachedConnectedCamera) {
   console.log("enumerateDevices() is called");
@@ -251,7 +261,7 @@ export function ConnectCamera(camera) {
     connectCameraBtnContainer.style.display = "none";
     captureImageBtnContainer.style.display = "flex";
 
-    if (isICAO) {
+    if (utilsCommonVars.isICAO) {
       webCamDevice = window.GetWebCameProvider();
       // {ICOAChecking: ƒ, IsServiceHealthy: ƒ, GetAndOpenDevice: ƒ, GetCropImage: ƒ}
 
@@ -267,7 +277,7 @@ export function ConnectCamera(camera) {
     pausedRequested = false;
     StartVideo();
     // document.getElementById("btnSaveCaptureImage").disabled = true;
-    if (isICAO) {
+    if (utilsCommonVars.isICAO) {
       StartWorker();
     }
     setIsDeviceConnected(true);
@@ -631,13 +641,20 @@ export function DisplayICAOCheckingMessage(message) {
 }
 
 export function RetrieveScripts(scriptsURL) {
+  console.log("========= RetrieveScripts is called ========");
   var areScriptsLoaded = false;
 
   for (let i = 0; i < scriptsURL.length; i++) {
-    let script = document.createElement("script");
-    script.src = scriptsURL[i];
-    script.async = false;
-    document.body.appendChild(script);
+    const scriptToRemove = document.querySelector(
+      `script[src="${scriptsURL[i]}"]`
+    );
+    console.log({ scriptToRemove });
+    if (!scriptToRemove) {
+      let script = document.createElement("script");
+      script.src = scriptsURL[i];
+      script.async = false;
+      document.body.appendChild(script);
+    }
   }
   areScriptsLoaded = true;
 }
@@ -645,11 +662,8 @@ export function RetrieveScripts(scriptsURL) {
 // Reconnect
 export async function Reconnect() {
   console.log("Reconnect ()");
-  if (isICAO) {
+  if (utilsCommonVars.isICAO) {
     if (serviceProxyForWebCam == null) {
-      // RetrieveScripts(configData.WebCam.Scripts);
-
-      // RetrieveScripts(window.EnrolmentDevices.WebCam.Scripts);
       RetrieveScripts(EnrolmentDevices.WebCam.Scripts);
       console.log("serviceproxyforwebacm  = null");
     }
@@ -683,7 +697,7 @@ export async function CaptureImage() {
   ctx.drawImage(video, 0, 0, resolutionWidth, resolutionHeight);
 
   const croppedimg = document.getElementById("cropped");
-  if (isICAO) {
+  if (utilsCommonVars.isICAO) {
     const GetCropImageResult = await window
       .GetWebCameProvider()
       .GetCropImage(canvas.toDataURL("image/jpeg", 1.0));
@@ -790,7 +804,7 @@ export function StopCameraIndicatorInBrowser() {
 // GetConnectionState
 export async function GetConnectionState() {
   console.log("GetConnectionState()");
-  if (isICAO) {
+  if (utilsCommonVars.isICAO) {
     serviceProxyForWebCam = window.serviceProxyForWebCam;
 
     if (typeof serviceProxyForWebCam == "undefined") {

@@ -57,8 +57,8 @@ const tooltipList = [...tooltipTriggerList].map(
 // #endregion
 // #region UseEffects
 // ---------------- apply effects ----------------------
-export const onICAOScriptLoad = async () => {
-  const {
+export const onICAOScriptLoad = async (isICAOWC) => {
+  var {
     CaptureImage,
     ClearICAOServiceThread,
     ConnectCamera,
@@ -84,9 +84,16 @@ export const onICAOScriptLoad = async () => {
     setLableMessageForICAO,
     stopVideoStream,
     toggleFullScreen,
+    utilsCommonVars,
+    onLoadUtils,
     utils,
   } = await import("./utils.js");
 
+  console.log({ isICAO });
+  console.log({ isICAOWC });
+  isICAO = isICAOWC;
+  utilsCommonVars.isICAO = isICAOWC;
+  onLoadUtils();
   console.log({ isICAO });
 
   reestCashedArray();
@@ -231,7 +238,7 @@ export const onICAOScriptLoad = async () => {
   }
 };
 
-onICAOScriptLoad();
+// onICAOScriptLoad();
 // #endregion
 
 modalElement.addEventListener("hidden.bs.modal", function () {
