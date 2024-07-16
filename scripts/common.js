@@ -1,7 +1,6 @@
 export function removeScript(src) {
-  console.log({ src });
   const scriptToRemove = document.querySelector(`script[src="${src}"]`);
-  console.log({ scriptToRemove });
+
   if (scriptToRemove) {
     scriptToRemove.remove();
   }
@@ -112,10 +111,7 @@ export const modalInnerHtml = html`
                 <div class="data-conatiner">
                   <!--#region left column -->
 
-                  <div
-                    id="left-features"
-                    class="left-column flex-column-space-around-center"
-                  >
+                  <div id="left-features" class="left-column d-none">
                     <div
                       class="icao-card-container display-flex-centered icao-white-background"
                       data-bs-toggle="tooltip"
@@ -299,10 +295,7 @@ export const modalInnerHtml = html`
 
                   <!-- right column -->
 
-                  <div
-                    id="right-features"
-                    class="right-column flex-column-space-around-center"
-                  >
+                  <div id="right-features" class="right-column d-none">
                     <div
                       class="icao-card-container display-flex-centered icao-white-background"
                       data-bs-toggle="tooltip"

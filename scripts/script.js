@@ -1,51 +1,10 @@
-console.log("Hi from scripts");
-
 // #region Imports
 
-import { removeScript, removeStyleSheet } from "./common.js";
-
-import {
-  CaptureImage,
-  ClearICAOServiceThread,
-  ConnectCamera,
-  EnrolmentDevices,
-  FaceDetectedRectangleDrawingThread,
-  GetConnectionState,
-  Reconnect,
-  RetrieveScripts,
-  SaveCaptureedImg,
-  StopCameraIndicatorInBrowser,
-  StopCheckingICAOServiceThread,
-  cachedCamera,
-  connectwithCameraFromLocalStorage,
-  enumerateDevices,
-  getSelectedCameraFromLocalStorage,
-  handleChangeInAvaliableCameras,
-  handleFullScreenChange,
-  isCheckingICAOServiceThread,
-  isICAO,
-  reestCashedArray,
-  setCachedCamera,
-  setIsCheckingICAOServiceThread,
-  setLableMessageForICAO,
-  stopVideoStream,
-  toggleFullScreen,
-} from "./utils.js";
 // import "./utils.js";
 // Function to dynamically import the module
 
 // #endregion
-import { StopWorker } from "./ICAOWorker.js";
-console.log("before load modal");
 
-(function () {
-  console.log("Hello from inside the SIF");
-})();
-
-console.log("DOMContentLoaded");
-var modalElement = document.getElementById("icao-modal");
-
-console.log("shown.bs.modal");
 // #region Bootstrap tootltip setup
 // Enable bootstrap tooltip
 const tooltipTriggerList = document.querySelectorAll(
@@ -89,12 +48,9 @@ export const onICAOScriptLoad = async (isICAOWC) => {
     utils,
   } = await import("./utils.js");
 
-  console.log({ isICAO });
-  console.log({ isICAOWC });
   isICAO = isICAOWC;
   utilsCommonVars.isICAO = isICAOWC;
   onLoadUtils();
-  console.log({ isICAO });
 
   reestCashedArray();
   setIsCheckingICAOServiceThread(true);
@@ -112,14 +68,10 @@ export const onICAOScriptLoad = async (isICAOWC) => {
   setCachedCamera(selecetedCameraIDFromLocalStorage);
   enumerateDevices(selecetedCameraIDFromLocalStorage);
 
-  console.log({ isICAO });
-  console.log({ isCheckingICAOServiceThread });
   if (isCheckingICAOServiceThread && isICAO) {
-    console.log(utils.CheckingICAOServiceThread);
     ClearICAOServiceThread(utils.CheckingICAOServiceThread);
     utils.CheckingICAOServiceThread = setInterval(() => {
       if (isCheckingICAOServiceThread && isICAO) {
-        console.log(isCheckingICAOServiceThread && isICAO);
         GetConnectionState().then((ConnectionState) => {
           setLableMessageForICAO(ConnectionState);
           const lblMessageError = document.getElementById("lblMessageForICAO");
@@ -218,13 +170,13 @@ export const onICAOScriptLoad = async (isICAOWC) => {
       openFullScreenBtn.style.display = "block";
       //   setIsFullScreen(false);
     }
-    stopVideoStream();
-    StopCameraIndicatorInBrowser();
-    StopCheckingICAOServiceThread();
-    document.getElementById("icao-modal-start-container").style.display =
-      "none";
-    removeScript("./scripts/script.js");
-    removeStyleSheet("./styles/styles.css");
+    // stopVideoStream();
+    // StopCameraIndicatorInBrowser();
+    // StopCheckingICAOServiceThread();
+    // document.getElementById("icao-modal-start-container").style.display =
+    //   "none";
+    // removeScript("./scripts/script.js");
+    // removeStyleSheet("./styles/styles.css");
 
     clearInterval(FaceDetectedRectangleDrawingThread);
   });
@@ -237,27 +189,3 @@ export const onICAOScriptLoad = async (isICAOWC) => {
     croppedImage.classList.remove("icao-img-width");
   }
 };
-
-// onICAOScriptLoad();
-// #endregion
-
-modalElement.addEventListener("hidden.bs.modal", function () {
-  console.log("modal closed");
-  // reset cashed array for tooltip
-  setIsCheckingICAOServiceThread(false);
-  StopWorker();
-  reestCashedArray();
-  stopVideoStream();
-  window.stream = null; // by Ali
-
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-    closeFullScreenBtn.style.display = "none";
-    openFullScreenBtn.style.display = "block";
-  }
-
-  modalElement.removeEventListener("fullscreenchange", handleFullScreenChange);
-
-  // Remove the script element
-  // stopVideoStream();
-});

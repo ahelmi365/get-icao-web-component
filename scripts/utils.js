@@ -1,10 +1,7 @@
-console.log("--------- Start OF UTILS -------------");
-
 import {
   StartWorker,
   StopWorker,
   UpdateIsIcaoCheckRunning,
-  FaceFeature,
 } from "./ICAOWorker.js";
 
 // import "./index.js";
@@ -124,20 +121,17 @@ export let videoRef;
 //#endregion
 
 export const onLoadUtils = () => {
-  console.log(utilsCommonVars);
-  if (!utilsCommonVars.isICAO) {
-    console.log("utilsCommonVars.isICAO", utilsCommonVars.isICAO);
-    leftFeatures.style.display = "none";
-    rightFeatures.style.display = "none";
+  if (utilsCommonVars.isICAO) {
+    leftFeatures.classList.add("flex-column-space-around-center");
+    leftFeatures.classList.remove("d-none");
+    rightFeatures.classList.add("flex-column-space-around-center");
+    rightFeatures.classList.remove("d-none");
   }
 };
 
 // #region functions
 // enumerateDevices
 export function enumerateDevices(cachedConnectedCamera) {
-  console.log("enumerateDevices() is called");
-  //   console.log("cachedConnectedCamera", cachedConnectedCamera);
-
   setLoading(true);
   let avCameras = {};
   navigator.mediaDevices
@@ -268,8 +262,8 @@ export function ConnectCamera(camera) {
       webCamDevice.onUpdateICAOCheck = function (IcaoResult) {
         UpdateIsIcaoCheckRunning(false);
         IcaoResult && IcaoResult.Success
-          ? HandleSuccessInICAOChecking(IcaoResult)
-          : HandleFailureInICAOChecking(IcaoResult);
+          ? handleSuccessInICAOChecking(IcaoResult)
+          : handleFailureInICAOChecking(IcaoResult);
       };
 
       StopWorker();
@@ -463,8 +457,8 @@ export function grapFrame() {
 }
 
 // HandleFailureInICAOChecking
-export function HandleFailureInICAOChecking(IcaoResult) {
-  DisplayICAOCheckingMessage(IcaoResult?.Message);
+export function handleFailureInICAOChecking(IcaoResult) {
+  displayICAOCheckingMessage(IcaoResult?.Message);
   $("#tblICAOFeaturesResult tbody").empty();
 }
 
@@ -473,43 +467,8 @@ export const reestCashedArray = () => {
   faceFeaturesStatus = new Array(20).fill("0");
 };
 
-// HandleSuccessInICAOChecking
-export function HandleSuccessInICAOChecking(IcaoResult) {
-  //   console.log({ IcaoResult });
-  DisplayICAOCheckingMessage("");
-  setIsDeviceConnected(true);
-  const parsedICAOResult = JSON.parse(IcaoResult.Result);
-
-  const FaceFeatures = [];
-  for (let i = 0; i < parsedICAOResult.length; i++) {
-    let icaoFeatureResult = new FaceFeature();
-    if (parsedICAOResult[i].FaceAttributeIdStr !== "Gender") {
-      icaoFeatureResult.FaceAttributeId = i; // added by Ali
-
-      icaoFeatureResult.FaceAttributeIdStr =
-        parsedICAOResult[i].FaceAttributeIdStr;
-
-      icaoFeatureResult.DependenciesStatus =
-        parsedICAOResult[i].DependenciesStatus;
-
-      icaoFeatureResult.FaceAttributeRangeStatus =
-        parsedICAOResult[i].FaceAttributeRangeStatus;
-
-      icaoFeatureResult.ICAOStatusStr = parsedICAOResult[i].ICAOStatusStr;
-
-      icaoFeatureResult.faceCropRectangle =
-        parsedICAOResult[i].faceCropRectangle;
-
-      // StyleICAOFeatureRow(icaoFeatureResult); // by Ali
-      FaceFeatures.push(icaoFeatureResult);
-    }
-  }
-
-  setICAODATA(FaceFeatures); // by Ali
-
-  //   ------------------ handle icao data
-
-  FaceFeatures.map((icaoItem, index) => {
+const applyStyleToLeftAndRightFeatures = (faceFeatures) => {
+  faceFeatures.map((icaoItem, index) => {
     const icaoCardElement = leftAndRightFeatures[index];
 
     if (icaoItem.ICAOStatusStr === IcaoAttributesValues.COMPATIBLE) {
@@ -525,10 +484,34 @@ export function HandleSuccessInICAOChecking(IcaoResult) {
     const toolTipId = `icao-face-feature-${icaoItem.FaceAttributeIdStr}`;
     updateTooltipText(toolTipId, faceFeaturesStatus, index, icaoItem);
   });
+};
 
-  showYawRollPitchErrorMessage(FaceFeatures);
+let faceFeatures = [];
+const fillFaceFeaturesWithNoGender = (parsedICAOResult) => {
+  faceFeatures = parsedICAOResult
+    .filter((result) => result.FaceAttributeIdStr !== "Gender")
+    .map((result, index) => ({
+      ...result,
+      FaceAttributeId: index,
+    }));
+};
+// HandleSuccessInICAOChecking
+
+export function handleSuccessInICAOChecking(IcaoResult) {
+  displayICAOCheckingMessage("");
+  setIsDeviceConnected(true);
+  const parsedICAOResult = JSON.parse(IcaoResult.Result);
+
+  fillFaceFeaturesWithNoGender(parsedICAOResult);
+
+  applyStyleToLeftAndRightFeatures(faceFeatures);
+
+  showYawRollPitchErrorMessage(faceFeatures);
 }
 
+const isFeatureInRange = (feature) => {
+  return feature && feature[0].FaceAttributeRangeStatus === "InRange";
+};
 // showYawRollPitchErrorMessage
 export function showYawRollPitchErrorMessage(FaceFeatures) {
   let atLeastPositionError = false;
@@ -536,33 +519,37 @@ export function showYawRollPitchErrorMessage(FaceFeatures) {
     "Failed to detect the face correctly, please look at the camera and try capturing again";
   //   const errorMessage = errorMessage;
   // Roll
-  const Roll = FaceFeatures.filter(function (el) {
+  const rollFeature = FaceFeatures.filter((el) => {
     return el.FaceAttributeIdStr == "Roll";
   });
+
+  const isRollFeatureInRange = isFeatureInRange(rollFeature);
   // Pitch
-  const Pitch = FaceFeatures.filter(function (el) {
+  const pitchFeature = FaceFeatures.filter((el) => {
     return el.FaceAttributeIdStr == "Pitch";
   });
-
+  const isPitchFeatureInRange = isFeatureInRange(pitchFeature);
   // Yaw
-  const Yaw = FaceFeatures.filter(function (el) {
+  const yawFeature = FaceFeatures.filter((el) => {
     return el.FaceAttributeIdStr == "Yaw";
   });
-  if (
-    (Roll && Roll[0].FaceAttributeRangeStatus != "InRange") ||
-    (Pitch && Pitch[0].FaceAttributeRangeStatus != "InRange") ||
-    (Yaw && Yaw[0].FaceAttributeRangeStatus != "InRange")
-  ) {
-    // console.log("Roll is not inRange");
-    atLeastPositionError = true; // by Ali
+  const isYawhFeatureInRange = isFeatureInRange(yawFeature);
 
-    DisplayICAOCheckingMessage(errorMessage);
-    setIsDeviceConnected(false);
-    connectCameraBtn.disabled = true;
-    captureImageBtn.disabled = true;
-  } else {
+  if (isRollFeatureInRange && isPitchFeatureInRange && isYawhFeatureInRange) {
+    console.log("Enable all");
     connectCameraBtn.disabled = false;
     captureImageBtn.disabled = false;
+  } else if (
+    !isRollFeatureInRange ||
+    !isPitchFeatureInRange ||
+    !isYawhFeatureInRange
+  ) {
+    console.log("disable all");
+    atLeastPositionError = true;
+    connectCameraBtn.disabled = true;
+    captureImageBtn.disabled = true;
+    displayICAOCheckingMessage(errorMessage);
+    setIsDeviceConnected(false);
   }
 
   // setIsDeviceConnected(!atLeastPositionError); // instead of the if condition (to be tested)
@@ -622,7 +609,7 @@ const updateTooltipText = (toolTipId, faceFeaturesStatus, index, icaoItem) => {
 //  StyleICAOFeatureRow() // to draw the table, not needed , commented by Ali
 
 // DisplayICAOCheckingMessage
-export function DisplayICAOCheckingMessage(message) {
+export function displayICAOCheckingMessage(message) {
   // console.log("DisplayICAOCheckingMessage", message);
   // console.log("typeof message",  message.length);
   const divICAOCheckingMessage = document.getElementById(
@@ -641,14 +628,12 @@ export function DisplayICAOCheckingMessage(message) {
 }
 
 export function RetrieveScripts(scriptsURL) {
-  console.log("========= RetrieveScripts is called ========");
   var areScriptsLoaded = false;
 
   for (let i = 0; i < scriptsURL.length; i++) {
     const scriptToRemove = document.querySelector(
       `script[src="${scriptsURL[i]}"]`
     );
-    console.log({ scriptToRemove });
     if (!scriptToRemove) {
       let script = document.createElement("script");
       script.src = scriptsURL[i];
@@ -751,7 +736,7 @@ export async function CaptureImage() {
 
       setIsLiveIcaoData(false); // by Ali
     } else {
-      DisplayICAOCheckingMessage("Cannot detect face");
+      displayICAOCheckingMessage("Cannot detect face");
       setIsPhotoCaptured(false);
       connectCameraBtnContainer.style.display = "none";
       captureImageBtnContainer.style.display = "flex";
@@ -803,7 +788,6 @@ export function StopCameraIndicatorInBrowser() {
 
 // GetConnectionState
 export async function GetConnectionState() {
-  console.log("GetConnectionState()");
   if (utilsCommonVars.isICAO) {
     serviceProxyForWebCam = window.serviceProxyForWebCam;
 
@@ -826,10 +810,7 @@ export async function GetConnectionState() {
         if (response && response.Result) {
           icaoStatusInstructions.style.display = "none";
           connectCameraBtn.disabled = false;
-          captureImageBtn.disabled = false;
-          //   StartWorker();
-          // if not icao chaecking
-          // startWorker() again
+          // captureImageBtn.disabled = false;
           return `${"ICAO Service Is Connected"}`;
         } else {
           icaoStatusInstructions.style.display = "flex";
@@ -1044,7 +1025,5 @@ export const getSelectedCameraFromLocalStorage = () => {
     return "-1";
   }
 };
-
-console.log("--------- END OF UTILS -------------");
 
 export let utils = { CheckingICAOServiceThread };

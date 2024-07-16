@@ -14,14 +14,12 @@ class ICaoChecker extends HTMLElement {
 
   connectedCallback() {
     const hasisICAOWCAttr = this.getAttribute("isICAOWC");
-    console.log({ hasisICAOWCAttr });
     if (hasisICAOWCAttr === null) {
       this.isICAOWC = false;
     } else {
       this.isICAOWC = true;
     }
     this.loadBootstrap();
-    console.log("connectedCallback()");
     const shadowRoot = this.attachShadow({ mode: "open" });
     // Create button to open modal
     this.initICAOModal();
@@ -84,18 +82,9 @@ class ICaoChecker extends HTMLElement {
     modals.forEach((modal) => {
       new window.bootstrap.Modal(modal);
     });
-
-    // Initialize tooltips
-    const tooltipTriggerList = this.shadowRoot.querySelectorAll(
-      '[data-bs-toggle="tooltip"]'
-    );
-    tooltipTriggerList.forEach((tooltipTriggerEl) => {
-      new window.bootstrap.Tooltip(tooltipTriggerEl);
-    });
   }
 
   async openModal() {
-    console.log("Adding script...........");
     // Remove existing script element if it exists
     const existingScript = document.querySelector(
       'script[src="./scripts/script.js"]'
@@ -106,27 +95,21 @@ class ICaoChecker extends HTMLElement {
     }
     // Initialize the modal with Bootstrap's jQuery method
     const modal = document.getElementById("icao-modal-start-container");
-    console.log({ modal });
     // $(modal).find(".modal").modal("show");
 
     const innerModal = modal.querySelector(".modal");
     if (innerModal) {
       innerModal.addEventListener("shown.bs.modal", async () => {
         // Your async function code here
-        console.log(
-          "Hiiiiiiiiiiiiii from inside shown modal -------------------"
-        );
 
         const { onICAOScriptLoad } = await import("./script.js");
         onICAOScriptLoad(this.isICAOWC);
       });
     }
     if (innerModal) {
-      innerModal.addEventListener("hidden.bs.modal", async function () {
+      innerModal.addEventListener("hidden.bs.modal", async () => {
         // Your async function code here
-        console.log(
-          "Hiiiiiiiiiiiiii from hidden shown modal -------------------"
-        );
+
         const {
           setIsCheckingICAOServiceThread,
           reestCashedArray,
@@ -135,7 +118,7 @@ class ICaoChecker extends HTMLElement {
           utils,
           EnrolmentDevices,
         } = await import("./utils.js");
-        const myUtils = (await import("./utils.js")).utils;
+        // const myUtils = (await import("./utils.js")).utils;
 
         setIsCheckingICAOServiceThread(false);
         StopWorker();

@@ -54,7 +54,6 @@ function run(fn) {
 }
 
 export function StopWorker() {
-  console.log("In StopWorker");
   isWorkerStopped = true;
   isIcaoCheckRunning = false;
   if (worker != null) {
@@ -65,15 +64,4 @@ export function StopWorker() {
 
 export function UpdateIsIcaoCheckRunning(status) {
   isIcaoCheckRunning = status;
-}
-
-export class FaceFeature {
-  FaceAttributeId; // added by Ali
-  FaceAttributeIdStr;
-  FaceAttributeScore;
-  FaceAttributeRangeStatus;
-  FaceAttributeMaxRange;
-  FaceAttributeMinRange;
-  DependenciesStatus;
-  faceCropRectangle;
 }
