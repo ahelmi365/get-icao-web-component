@@ -46,7 +46,7 @@ export const onICAOScriptLoad = async (isICAOWC) => {
     onLoadUtils,
     utils,
   } = await import("./utils.js");
-  console.log("version 1.1.4");
+  console.log("version 1.1.5");
   isICAO = isICAOWC;
   utilsCommonVars.isICAO = isICAOWC;
   onLoadUtils();
