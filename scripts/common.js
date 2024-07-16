@@ -120,12 +120,21 @@ export const modalInnerHtml = html`
                       data-bs-placement="right"
                       data-bs-title="0"
                     >
-                      <img
+                      <!-- <img
                         src="./assets/icao-attributes/sharpness.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
-                      />
+                      /> -->
+                      <svg
+                        class="icon-svg white-svg"
+                        width="78"
+                        height="101"
+                        viewBox="0 0 78 101"
+                        fill="white"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M0 0L78 101H0V0Z" fill="white" />
+                      </svg>
                     </div>
                     <div
                       class="icao-card-container display-flex-centered icao-white-background"
@@ -138,7 +147,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/brightness.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -153,7 +161,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/contrast.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -168,7 +175,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/Intensitylevels.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -183,7 +189,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/shadow.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -198,7 +203,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/noseshadow.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -213,7 +217,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/specularity.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -228,7 +231,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/eyegaze.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -243,7 +245,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/eyestatusr.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -258,7 +259,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/eyestatusl.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -307,7 +307,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/glassstatus.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -322,7 +321,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/heavyframe.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -337,7 +335,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/mousestatus.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -352,7 +349,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/backgrounduniformity.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -367,7 +363,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/redeyer.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -382,7 +377,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/redeyel.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -425,7 +419,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/pitch.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
@@ -440,7 +433,6 @@ export const modalInnerHtml = html`
                       <img
                         src="./assets/icao-attributes/faceconfidence.svg"
                         class="icon-svg white-svg"
-                        white-svg
                         alt=""
                       />
                     </div>
