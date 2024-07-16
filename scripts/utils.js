@@ -765,11 +765,12 @@ const updatePhotoImage = (src) => {
   resultImage.src = src;
 };
 // SaveCaptureedImg
-export function SaveCaptureedImg() {
+export function SaveCaptureedImg(savedImageElm) {
   StopCameraIndicatorInBrowser();
   ClearICAOServiceThread();
   const croppedImage = document.getElementById("cropped");
-  updatePhotoImage(croppedImage.src);
+  // updatePhotoImage(croppedImage.src);
+  savedImageElm.src = croppedImage.src;
   stopVideoStream();
   croppedImage.style.display = "none";
 }

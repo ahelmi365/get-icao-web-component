@@ -15,7 +15,7 @@ const tooltipList = [...tooltipTriggerList].map(
 // #endregion
 // #region UseEffects
 // ---------------- apply effects ----------------------
-export const onICAOScriptLoad = async (isICAOWC) => {
+export const onICAOScriptLoad = async (isICAOWC, savedImageElm) => {
   var {
     CaptureImage,
     ClearICAOServiceThread,
@@ -46,7 +46,7 @@ export const onICAOScriptLoad = async (isICAOWC) => {
     onLoadUtils,
     utils,
   } = await import("./utils.js");
-  console.log("version 1.1.5");
+
   isICAO = isICAOWC;
   utilsCommonVars.isICAO = isICAOWC;
   onLoadUtils();
@@ -119,7 +119,7 @@ export const onICAOScriptLoad = async (isICAOWC) => {
   });
 
   saveImageBtn.addEventListener("click", () => {
-    SaveCaptureedImg();
+    SaveCaptureedImg(savedImageElm);
   });
   reconnectIcaoBtn.addEventListener("click", () => {
     Reconnect();

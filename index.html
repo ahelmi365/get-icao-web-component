@@ -5,19 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
+
+  <!-- add data-is-icao-wc to the tag below to allow ICAO -->
+  <!-- add data-open-modal-button-id="open-icao-modal"  -->
+  <!-- add data-saved-image-id="icao-result-image" -->
+  <icao-checker-wc> </icao-checker-wc>
+
   <body class="container mt-4">
     <button
       class="btn btn-primary"
       id="open-icao-modal"
-      name="icao-modal"
+      name="open-icao-modal"
       type="button"
     >
       Open ICAO Modal
     </button>
-    <!-- add 'isICAOWC' to the tag below to allow ICAO -->
-    <icao-checker-wc isICAOWC>
-      <div>This is the light DOM!</div>
-    </icao-checker-wc>
 
     <div class="result-image card mt-4 p-4" style="height: 315px">
       <img id="icao-result-image" src="" alt="" width="200px" />

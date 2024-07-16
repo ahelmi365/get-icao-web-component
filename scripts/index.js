@@ -10,27 +10,71 @@ class ICaoChecker extends HTMLElement {
     super();
     // this.attachShadow({ mode: "open" });
     this.isICAOWC = false;
+    this.savedImageElm = null;
   }
 
   connectedCallback() {
-    const hasisICAOWCAttr = this.getAttribute("isICAOWC");
+    console.log("version 1.1.6");
+    const hasisICAOWCAttr = this.getAttribute("data-is-icao-wc");
+    const openModalBtnId = this.getAttribute("data-open-modal-button-id");
+    const savedImageId = this.getAttribute("data-saved-image-id");
+
+    console.log(hasisICAOWCAttr, openModalBtnId, savedImageId);
+
+    // handle isICAO or not
     if (hasisICAOWCAttr === null) {
       this.isICAOWC = false;
     } else {
       this.isICAOWC = true;
     }
+
     this.loadBootstrap();
+
     const shadowRoot = this.attachShadow({ mode: "open" });
     // Create button to open modal
     this.initICAOModal();
-    const openMOdalBtn = document.getElementById("open-icao-modal");
-    openMOdalBtn.addEventListener(
-      "click",
-      this.openModalAndoadIcaoScripts.bind(this)
-    );
-    // Append button to the shadow DOM
 
-    // shadowRoot.appendChild(button);
+    // handle open modal btn
+    console.log({ openModalBtnId });
+
+    try {
+      const openModalBtn = document.getElementById(
+        openModalBtnId ? openModalBtnId : "open-icao-modal"
+      );
+      console.log({ openModalBtn });
+      if (!openModalBtn) {
+        throw new Error(
+          `No element found to open the ICAO Modal, please check the 'data-open-modal-button-id' attribute`
+        );
+      } else {
+        openModalBtn.addEventListener(
+          "click",
+          this.openModalAndoadIcaoScripts.bind(this)
+        );
+      }
+    } catch (error) {
+      alert(error);
+      console.error(
+        `No element found to open the ICAO Modal, please check the 'data-open-modal-button-id' attribute`
+      );
+    }
+    // handle saved image id
+
+    try {
+      this.savedImageElm = document.getElementById(
+        savedImageId ? savedImageId : "icao-result-image"
+      );
+      if (!this.savedImageElm) {
+        throw new Error(
+          "No image element found to store the cropped image from ICAO Modal, please check the 'data-saved-image-id' attribute"
+        );
+      }
+    } catch (error) {
+      alert(error);
+      console.error(
+        "No image element found to store the cropped image from ICAO Modal, please check the 'data-saved-image-id' attribute"
+      );
+    }
   }
   disconnectedCallback() {
     console.log("disconnectedCallback");
@@ -103,7 +147,7 @@ class ICaoChecker extends HTMLElement {
         // Your async function code here
 
         const { onICAOScriptLoad } = await import("./script.js");
-        onICAOScriptLoad(this.isICAOWC);
+        onICAOScriptLoad(this.isICAOWC, this.savedImageElm);
       });
     }
     if (innerModal) {
