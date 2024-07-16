@@ -14,7 +14,7 @@ class ICaoChecker extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("version 1.1.6");
+    console.log("version 1.1.7");
     const hasisICAOWCAttr = this.getAttribute("data-is-icao-wc");
     const openModalBtnId = this.getAttribute("data-open-modal-button-id");
     const savedImageId = this.getAttribute("data-saved-image-id");

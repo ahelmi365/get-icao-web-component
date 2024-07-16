@@ -761,9 +761,6 @@ export async function CaptureImage() {
 
 const resultImage = document.getElementById("icao-result-image");
 
-const updatePhotoImage = (src) => {
-  resultImage.src = src;
-};
 // SaveCaptureedImg
 export function SaveCaptureedImg(savedImageElm) {
   StopCameraIndicatorInBrowser();
