@@ -512,53 +512,54 @@ export function handleSuccessInICAOChecking(IcaoResult) {
 const isFeatureInRange = (feature) => {
   return feature && feature[0].FaceAttributeRangeStatus === "InRange";
 };
-// showYawRollPitchErrorMessage
-export function showYawRollPitchErrorMessage(FaceFeatures) {
-  let atLeastPositionError = false;
-  const errorMessage =
-    "Failed to detect the face correctly, please look at the camera and try capturing again";
-  //   const errorMessage = errorMessage;
-  // Roll
-  const rollFeature = FaceFeatures.filter((el) => {
-    return el.FaceAttributeIdStr == "Roll";
-  });
 
-  const isRollFeatureInRange = isFeatureInRange(rollFeature);
-  // Pitch
-  const pitchFeature = FaceFeatures.filter((el) => {
-    return el.FaceAttributeIdStr == "Pitch";
+const getFeatureByAttributeIdStr = (faceFeatures, faceAttributeIdStr) => {
+  return faceFeatures.filter((el) => {
+    return el.FaceAttributeIdStr == faceAttributeIdStr;
   });
-  const isPitchFeatureInRange = isFeatureInRange(pitchFeature);
-  // Yaw
-  const yawFeature = FaceFeatures.filter((el) => {
-    return el.FaceAttributeIdStr == "Yaw";
-  });
-  const isYawhFeatureInRange = isFeatureInRange(yawFeature);
+};
 
+const enableDisableCameraButtons = (
+  isRollFeatureInRange,
+  isPitchFeatureInRange,
+  isYawhFeatureInRange
+) => {
   if (isRollFeatureInRange && isPitchFeatureInRange && isYawhFeatureInRange) {
-    console.log("Enable all");
     connectCameraBtn.disabled = false;
     captureImageBtn.disabled = false;
+    setIsDeviceConnected(true);
   } else if (
     !isRollFeatureInRange ||
     !isPitchFeatureInRange ||
     !isYawhFeatureInRange
   ) {
-    console.log("disable all");
-    atLeastPositionError = true;
     connectCameraBtn.disabled = true;
     captureImageBtn.disabled = true;
-    displayICAOCheckingMessage(errorMessage);
+    displayICAOCheckingMessage(rollPitchYawErrorMessage);
     setIsDeviceConnected(false);
   }
+};
+// showYawRollPitchErrorMessage
+const rollPitchYawErrorMessage =
+  "Failed to detect the face correctly, please look at the camera and try capturing again";
+export function showYawRollPitchErrorMessage(faceFeatures) {
+  // Roll
+  const rollFeature = getFeatureByAttributeIdStr(faceFeatures, "Roll");
+  const isRollFeatureInRange = isFeatureInRange(rollFeature);
 
-  // setIsDeviceConnected(!atLeastPositionError); // instead of the if condition (to be tested)
-  if (!atLeastPositionError) {
-    // DisplayICAOCheckingMessage("atLeastPositionError = false");
-    setIsDeviceConnected(true);
-  } else {
-    setIsDeviceConnected(false);
-  }
+  // Pitch
+  const pitchFeature = getFeatureByAttributeIdStr(faceFeatures, "Pitch");
+  const isPitchFeatureInRange = isFeatureInRange(pitchFeature);
+
+  // Yaw
+  const yawFeature = getFeatureByAttributeIdStr(faceFeatures, "Yaw");
+  const isYawhFeatureInRange = isFeatureInRange(yawFeature);
+
+  enableDisableCameraButtons(
+    isRollFeatureInRange,
+    isPitchFeatureInRange,
+    isYawhFeatureInRange
+  );
 }
 const updateTooltipText = (toolTipId, faceFeaturesStatus, index, icaoItem) => {
   const tooltipInstance = bootstrap.Tooltip.getInstance(
@@ -628,8 +629,6 @@ export function displayICAOCheckingMessage(message) {
 }
 
 export function RetrieveScripts(scriptsURL) {
-  var areScriptsLoaded = false;
-
   for (let i = 0; i < scriptsURL.length; i++) {
     const scriptToRemove = document.querySelector(
       `script[src="${scriptsURL[i]}"]`
@@ -641,7 +640,6 @@ export function RetrieveScripts(scriptsURL) {
       document.body.appendChild(script);
     }
   }
-  areScriptsLoaded = true;
 }
 
 // Reconnect

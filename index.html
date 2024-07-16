@@ -14,15 +14,19 @@
     >
       Open ICAO Modal
     </button>
-    <!-- add 'isICAOWC' to the tag below to all ICAO -->
+    <!-- add 'isICAOWC' to the tag below to allow ICAO -->
     <icao-checker-wc isICAOWC>
       <div>This is the light DOM!</div>
     </icao-checker-wc>
 
     <div class="result-image card mt-4 p-4" style="height: 315px">
-      <img id="icao-result-image" src="" alt="" width="300px" />
+      <img id="icao-result-image" src="" alt="" width="200px" />
     </div>
 
-    <script src="./scripts/index.js" type="module"></script>
+    <!-- <script src="./scripts/index.js" type="module"></script> -->
+    <script
+      src="https://cdn.jsdelivr.net/gh/ahelmi365/get-icao-web-component@master/scripts/index.js"
+      type="module"
+    ></script>
   </body>
 </html>
