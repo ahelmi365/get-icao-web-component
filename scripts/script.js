@@ -1,5 +1,4 @@
 // #region Imports
-
 // import "./utils.js";
 // Function to dynamically import the module
 
@@ -47,7 +46,7 @@ export const onICAOScriptLoad = async (isICAOWC) => {
     onLoadUtils,
     utils,
   } = await import("./utils.js");
-
+  console.log("version 1.1.0");
   isICAO = isICAOWC;
   utilsCommonVars.isICAO = isICAOWC;
   onLoadUtils();
