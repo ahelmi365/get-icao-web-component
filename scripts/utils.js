@@ -621,8 +621,10 @@ export function displayICAOCheckingMessage(message) {
     // divICAOCheckingMessage.style.visibility = "visible";
     if (message != undefined && message.length > 0) {
       divICAOCheckingMessage.innerText = message;
+      captureImageBtn.disabled = true;
     } else {
       divICAOCheckingMessage.style.display = "none";
+      captureImageBtn.disabled = false;
     }
     setIsDeviceConnected(false);
   }
@@ -758,8 +760,6 @@ export async function CaptureImage() {
     setIsLiveIcaoData(false); // by Ali
   }
 }
-
-const resultImage = document.getElementById("icao-result-image");
 
 // SaveCaptureedImg
 export function SaveCaptureedImg(savedImageElm) {

@@ -14,7 +14,7 @@ class ICaoChecker extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("version 1.1.8");
+    console.log("version 1.1.9");
     const hasisICAOWCAttr = this.getAttribute("data-is-icao-wc");
     const openModalBtnId = this.getAttribute("data-open-modal-button-id");
     const savedImageId = this.getAttribute("data-saved-image-id");
@@ -93,7 +93,7 @@ class ICaoChecker extends HTMLElement {
   openModalAndoadIcaoScripts() {
     this.openModal(this);
     // loadScript("./scripts/script.js");
-    loadStyle("./styles/styles.css");
+    // loadStyle("./styles/styles.css");
   }
   loadBootstrap() {
     // Load necessary scripts and styles
@@ -144,16 +144,12 @@ class ICaoChecker extends HTMLElement {
     const innerModal = modal.querySelector(".modal");
     if (innerModal) {
       innerModal.addEventListener("shown.bs.modal", async () => {
-        // Your async function code here
-
         const { onICAOScriptLoad } = await import("./script.js");
         onICAOScriptLoad(this.isICAOWC, this.savedImageElm);
       });
     }
     if (innerModal) {
       innerModal.addEventListener("hidden.bs.modal", async () => {
-        // Your async function code here
-
         const {
           setIsCheckingICAOServiceThread,
           reestCashedArray,
