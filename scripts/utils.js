@@ -620,7 +620,9 @@ export function displayICAOCheckingMessage(message) {
     divICAOCheckingMessage.style.display = "flex";
     // divICAOCheckingMessage.style.visibility = "visible";
     if (message != undefined && message.length > 0) {
-      divICAOCheckingMessage.innerText = message;
+      if (message !== divICAOCheckingMessage.innerText) {
+        divICAOCheckingMessage.innerText = message;
+      }
       captureImageBtn.disabled = true;
     } else {
       divICAOCheckingMessage.style.display = "none";
