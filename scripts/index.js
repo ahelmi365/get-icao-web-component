@@ -5,6 +5,7 @@ import {
   removeScript,
   modalInnerHtml,
 } from "./common.js";
+
 class ICaoChecker extends HTMLElement {
   constructor() {
     super();
@@ -14,7 +15,7 @@ class ICaoChecker extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("version 1.1.10");
+    console.log("version 1.2.1");
     const hasisICAOWCAttr = this.getAttribute("data-is-icao-wc");
     const openModalBtnId = this.getAttribute("data-open-modal-button-id");
     const savedImageId = this.getAttribute("data-saved-image-id");
@@ -105,13 +106,11 @@ class ICaoChecker extends HTMLElement {
       )
       .then(() =>
         loadScript(
-          // "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
           "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         )
       )
       .then(() =>
         loadStyle(
-          // "https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         )
       )
@@ -184,20 +183,10 @@ class ICaoChecker extends HTMLElement {
     }
 
     // load icao scripts()
-    loadScript("./scripts/utils.js");
-    loadScript("./scripts/script.js");
-  }
 
-  // static get styles() {
-  //   return css`
-  //     :host {
-  //       display: block;
-  //     }
-  //     .container {
-  //       padding: 16px;
-  //     }
-  //   `;
-  // }
+    // loadScript("./utils.js");
+    // loadScript("./script.js");
+  }
 }
 
 if (!customElements.get("icao-checker-wc")) {
