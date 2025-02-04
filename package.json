@@ -1,29 +1,4 @@
 {
-<<<<<<< HEAD
-  "name": "get-icao-web-component",
-  "version": "1.2.3",
-  "description": "web component to use ICAO Checker",
-  "main": "scritps/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ahelmi365/get-icao-web-component.git"
-  },
-  "keywords": [
-    "get",
-    "icao",
-    "wc",
-    "web-component"
-  ],
-  "author": "Ali Helmi",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ahelmi365/get-icao-web-component/issues"
-  },
-  "homepage": "https://github.com/ahelmi365/get-icao-web-component#readme"
-=======
   "name": "get-icao-checker-wc",
   "description": "Webcomponent get-icao-checker-wc following open-wc recommendations",
   "license": "MIT",
@@ -48,5 +23,4 @@
     "@web/dev-server": "^0.4.6"
   },
   "customElements": "custom-elements.json"
->>>>>>> bc25f87 (refctor icao checker)
 }
