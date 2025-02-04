@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <style>
+      body {
+        background: #fafafa;
+      }
+    </style>
+  </head>
+  <body class="container mt-4">
+    <button
+      class="btn btn-primary"
+      id="open-icao-modal"
+      name="open-icao-modal"
+      type="button"
+    >
+      Open ICAO Modal
+    </button>
+    <button
+      class="btn btn-primary"
+      name="open-icao-modal"
+      type="button"
+      onclick="logSRC()"
+    >
+      log img src
+    </button>
+
+    <div class="result-image card mt-4 p-4" style="height: 315px">
+      <img
+        id="icao-result-image"
+        src=""
+        alt=""
+        width="auto"
+        height="auto"
+        style="border: 1px solid red; margin-top: 1rem"
+      />
+    </div>
+    <div id="demo"></div>
+
+    <script src="../get-icao-checker-wc.js" type="module" defer></script>
+    <script type="module" defer>
+      import { html, render } from "lit";
+      import "../get-icao-checker-wc.js";
+      console.log("hii from html");
+      let imgSrc = "test";
+      window.logSRC = () => {
+        console.log("hi from logSRC");
+        console.log(imgSrc);
+      };
+
+      const setSavedImgSrc = (src) => {
+        console.log("hii from setSavedImgSrc()");
+        imgSrc = src;
+      };
+
+      render(
+        html`
+          <get-icao-checker-wc
+            isICAOWC
+            openModalElmId="open-icao-modal"
+            savedImageElmId="icao-result-image"
+            .getImgSrc=${setSavedImgSrc}
+            language="es"
+          />
+        `,
+        document.querySelector("#demo")
+      );
+    </script>
+  </body>
+</html>
