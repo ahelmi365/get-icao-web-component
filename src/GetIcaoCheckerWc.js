@@ -50,7 +50,7 @@ export class GetIcaoCheckerWc extends LitElement {
 
   constructor() {
     super();
-    console.log("constructor version 1.7.4");
+    console.log("constructor version 2.0.2");
 
     this.isICAOWC = false;
     this.language = "en";
@@ -62,6 +62,8 @@ export class GetIcaoCheckerWc extends LitElement {
     icaoAppWC.shadowRoot = this.icaoRoot;
   }
   handleBeforeUnload = (icaoRoot) => {
+    console.log(this.hasAttribute("isICAOWC"));
+    this.isICAOWC = false;
     EnrolmentDevices.WebCam.Scripts.map((script) => {
       // removeScript(script);
       const scriptToRemove = icaoRoot.querySelector(`script[src="${script}"]`);
@@ -74,6 +76,7 @@ export class GetIcaoCheckerWc extends LitElement {
     // delete window.EnrolmentDevices;
   };
   async connectedCallback() {
+    console.log(this.hasAttribute("isICAOWC"));
     icaoAppWC.isICAO = this.hasAttribute("isICAOWC");
     icaoAppWC.language = this.getAttribute("language") || "en";
     icaoAppWC.openModalElmId = this.getAttribute("openModalElmId");
